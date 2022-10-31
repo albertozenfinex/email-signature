@@ -1,34 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useRef, useCallback } from "react";
+import { render } from "react-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const ref = useRef();
+
+  const uName = 'Alberto';
+
+  const copyTextToClipboard = el => {
+    const range = document.createRange(0);
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+  };
+
+  const handleCopyClick = useCallback(() => {
+    copyTextToClipboard(
+      ref.current.querySelector("#signature-preview-workspace")
+    );
+  }, [ref]);
+
+
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <div
+        ref={ref}
+        style={{ display: "flex", margin: "0 auto", justifyContent: "center" }}
+        dangerouslySetInnerHTML={{
+          __html: `
+            <!DOCTYPE html>
+            <html>
+              <body style="margin:0;padding:0;">
+                <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+                <table id="signature-preview-workspace" cellpadding="0" cellspacing="0">
+                  <tbody>
+                    <tr>
+                      <td style="color: red;">Hi ${uName} here...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </body>
+            </html>
+          `
+        }}
+      />
+
+      <button
+        onClick={() => {
+          handleCopyClick();
+        }}
+      >
+        Copy
+      </button>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+
