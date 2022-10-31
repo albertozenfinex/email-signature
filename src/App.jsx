@@ -1,10 +1,18 @@
-import React, { useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { render } from "react-dom";
 
 function App() {
-  const ref = useRef();
+  const [nombre, setNombre] = useState("nombre");
 
-  const uName = 'Alberto';
+  const ref = useRef();
+  
+    
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    //setNombre(e.value);
+  }
+  
 
   const copyTextToClipboard = el => {
     const range = document.createRange(0);
@@ -23,8 +31,26 @@ function App() {
 
 
 
+
   return (
     <div>
+
+      <form
+        onChange={handleSubmit}
+      >
+        <input 
+          type="text" 
+          id="nombre"
+          placeholder="Nombre"
+          value={nombre}
+          onChange={ e => setNombre(e.target.value)}
+        />
+
+        <input type="submit" value="Enviar" />
+
+      </form>
+
+
       <div
         ref={ref}
         style={{ display: "flex", margin: "0 auto", justifyContent: "center" }}
@@ -37,7 +63,7 @@ function App() {
                 <table id="signature-preview-workspace" cellpadding="0" cellspacing="0">
                   <tbody>
                     <tr>
-                      <td style="color: red;">Hi ${uName} here...</td>
+                      <td style="color: red;">Hi ${nombre} here...</td>
                     </tr>
                   </tbody>
                 </table>
@@ -46,6 +72,7 @@ function App() {
           `
         }}
       />
+      
 
       <button
         onClick={() => {
